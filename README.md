@@ -7,19 +7,25 @@ Compile
 =======
 
 mkdir build/
+
 cd build/
+
 cmake ../gcm/
+
 make
 
 Prepare
 =======
 cd tasks/
+
 gmsh -3 cover-small.geo
+
 gmsh -3 cube.geo
 
 Run
 ===
 cd build/
+
 ./gcm3d --task ../tasks/friction-test.xml --zones ../tasks/basic-contact-task-1cpu-zones.xml --data-dir ../tasks/ --dump-vtk @
 
 Customize
