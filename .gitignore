@@ -19,3 +19,12 @@
 *.exe
 *.out
 *.app
+
+# Build dir
+build/*
+
+# Generated geometry
+*.msh
+
+# Dumps
+*.vtu
