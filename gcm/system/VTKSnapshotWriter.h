@@ -21,7 +21,7 @@ using std::stringstream;
 #include <vtkDoubleArray.h>
 #include <vtkIntArray.h>
 #include <vtkPointData.h>
-#include <vtkstd/string>
+//#include <vtkstd/string>
 
 #include "../meshtypes/TetrMesh_1stOrder.h"
 #include "TetrMeshSet.h"

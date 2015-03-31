@@ -82,7 +82,7 @@ find_package (VTK REQUIRED)
 if (VTK_FOUND)
 	message(STATUS "VTK found")
 	include_directories(${VTK_INCLUDE_DIRS})
-	set(LINK_LIBRARIES vtkCommon vtkFiltering vtkIO)
+	set(LINK_LIBRARIES vtkCommonCore vtkCommonDataModel vtkCommonExecutionModel vtkFiltersCore vtkIOCore vtkIOXML)
 endif (VTK_FOUND)
 
 find_package (GSL REQUIRED)

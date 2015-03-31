@@ -1,0 +1,35 @@
+<task snap_num="30" step_per_snap="1">
+
+	<mesh>
+		<zones>
+			<zone num="0" file="cub6.out"/>
+		</zones>
+	</mesh>
+        <!--mesh>
+                <zones>
+                        <zone num="1" file="cub6.out"/>
+                </zones>
+                <transform type="translate" x="0" y="0" z="1.01" />
+        </mesh-->
+
+	<rheology la="7000000000" mu="1000000000" rho="7800000"	yield="10000000000000000">
+		<area type="mesh">0</area>
+	</rheology>
+        <!--rheology la="7000000000" mu="1000000000" rho="7800000"	yield="10000000000000000">
+                <area type="mesh">1</area>
+        </rheology-->
+
+        <!--stress>
+                <form type="step" begintime="0" duration="0.0001">
+                        amplitude 0.05 0.05 0.25 0 0 0 0 0 0
+                </form>
+                <area type="box">
+                        X -10 10
+                        Y -10 10
+                        Z 0 2.999
+                </area>
+                <perform type="uniform">
+                </perform>
+        </stress-->
+
+</task>
