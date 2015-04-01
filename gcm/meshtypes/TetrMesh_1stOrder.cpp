@@ -477,6 +477,80 @@ int TetrMesh_1stOrder::find_border_node_normal(int border_node_index, float* x, 
 	if( find_owner_tetr(&nodes[border_node_index], - min_h * final_normal[0], - min_h * final_normal[1], - min_h * final_normal[2]) == NULL )
 		throw GCMException( GCMException::MESH_EXCEPTION, "Can not create reasonable normal for node - is the border too sharp?");
 }
+// TODO move actual file and string operations into TaskPreparator or MshFileReader
+int TetrMesh_1stOrder::load_ani3d_out_file(char* ani3d_out_file_name)
+{
+	int tmp_int;
+
+	int number_of_nodes;
+	int number_of_elements;
+	ElasticNode new_node;
+	Tetrahedron_1st_order new_tetr;
+
+	ifstream ani3d_out_infile;
+
+	ani3d_out_infile.open(ani3d_out_file_name, ifstream::in);
+	if(!ani3d_out_infile.is_open())
+		throw GCMException( GCMException::MESH_EXCEPTION, "Can not open ani3d_out file");
+
+	*logger < "INFO: TetrMesh_1stOrder::load_ani3d_out_files - Reading file...";
+
+	ani3d_out_infile >> number_of_nodes;
+
+	for(int i = 0; i < number_of_nodes; i++)
+	{
+		// Zero all values
+		new_node.local_num = new_node.remote_num = new_node.absolute_num = -1;
+		new_node.local_zone_num = new_node.remote_zone_num = -1;
+		new_node.coords[0] = new_node.coords[1] = new_node.coords[2] = 0;
+		new_node.fixed_coords[0] = new_node.fixed_coords[1] = new_node.fixed_coords[2] = 0;
+		new_node.la = new_node.mu = new_node.rho = 0;
+		new_node.values[0] = new_node.values[1] = new_node.values[2] = 0;
+		new_node.values[3] = new_node.values[4] = new_node.values[5] = 0;
+		new_node.values[6] = new_node.values[7] = new_node.values[8] = 0;
+		new_node.elements = NULL;
+		new_node.contact_data = NULL;
+		new_node.local_basis = NULL;
+		new_node.setIsBorder (false);
+		new_node.addOwner (GCM);
+		new_node.setContactType (Free);
+
+		new_node.local_num = i;
+		new_node.absolute_num = new_node.local_num;
+		ani3d_out_infile >> new_node.coords[0] >> new_node.coords[1] >> new_node.coords[2];
+		new_node.setPlacement (Local);
+		new_node.setIsBorder (false);
+		new_node.addOwner (GCM);
+		new_node.setContactType (Free);
+		new_node.contact_data = NULL;
+		new_node.local_basis = NULL;
+
+		new_node.mesh = this;
+		nodes.push_back(new_node);
+		new_nodes.push_back(new_node);
+	}
+
+	ani3d_out_infile >> number_of_elements;
+
+	for(int i = 0; i < number_of_elements; i++)
+	{
+		ani3d_out_infile >> new_tetr.vert[0] >> new_tetr.vert[1] >> new_tetr.vert[2] >> new_tetr.vert[3] >>tmp_int;
+
+		if( (new_tetr.vert[0] <= 0) || (new_tetr.vert[1] <= 0) || (new_tetr.vert[2] <= 0) || (new_tetr.vert[3] <= 0) )
+			throw GCMException( GCMException::MESH_EXCEPTION, "Wrong file format");
+
+		new_tetr.vert[0]--; new_tetr.vert[1]--; new_tetr.vert[2]--; new_tetr.vert[3]--;
+		new_tetr.local_num = i;
+
+		tetrs.push_back(new_tetr);
+	}
+
+	*logger < "INFO: TetrMesh_1stOrder::load_ani3d_out_files - File read.";
+
+	ani3d_out_infile.close();
+
+	return 0;
+};
 
 // TODO move actual file and string operations into TaskPreparator or MshFileReader
 int TetrMesh_1stOrder::load_node_ele_files(char* node_file_name, char* ele_file_name)
@@ -1935,12 +2009,13 @@ int TetrMesh_1stOrder::proceed_rheology()
 
 void TetrMesh_1stOrder::check_stresses(float tau)
 {
+	*logger << "Nodes: " < nodes.size();
 	for(int i = 0; i < nodes.size(); i++)
 	{
 		if(nodes[i].isLocal ())
 		{
 // FIXME
-stresser->set_current_stress(&nodes[i], &nodes[i], tau);
+//stresser->set_current_stress(&nodes[i], &nodes[i], tau);
 			if( nodes[i].volume_calculator == NULL )
 				nodes[i].volume_calculator = mesh_set->getDefaultVolumeCalculator();
 			if( (nodes[i].border_condition == NULL) || ( ! nodes[i].border_condition->form->isActive(tau) ) )
@@ -2328,8 +2403,8 @@ void TetrMesh_1stOrder::update_current_time(float time_step)
 };
 
 void TetrMesh_1stOrder::load_geometry_from_file(string file_name, map<string,string> params){
-	enum TYPES {CAS, ELE, GMV, MSH, VTU, UNKNOWN};
-	string types_str[] = {"cas", "ele", "gmv", "msh", "vtu"};
+	enum TYPES {CAS, ELE, GMV, MSH, VTU, OUT, UNKNOWN};
+	string types_str[] = {"cas", "ele", "gmv", "msh", "vtu", "out"};
 	string type = params.count("type") ? params["type"] : "msh";
 	int idx = UNKNOWN;
 	for (int i = 0; i < UNKNOWN; i++)
@@ -2349,7 +2424,7 @@ void TetrMesh_1stOrder::load_geometry_from_file(string file_name, map<string,str
 //			case GMV: ;
 			case MSH:
 			{
-				load_msh_file(const_cast<char*>(file_name.c_str()));
+				load_ani3d_out_file(const_cast<char*>(file_name.c_str()));
 				break;
 			}
 			case VTU:
@@ -2357,6 +2432,11 @@ void TetrMesh_1stOrder::load_geometry_from_file(string file_name, map<string,str
 				load_vtu_file(file_name);
 				break;
 			}
+			case OUT:
+                        {
+                                load_ani3d_out_file(const_cast<char*>(file_name.c_str()));
+                                break;
+                        }
 			default: throw GCMException(GCMException::UNIMPLEMENTED_EXCEPTION, "Type "+type+" is not supported");                   
 	}
 }

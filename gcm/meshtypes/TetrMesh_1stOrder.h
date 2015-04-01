@@ -24,7 +24,7 @@ using std::set;
 #include <vtkDoubleArray.h>
 #include <vtkIntArray.h>
 #include <vtkPointData.h>
-#include <vtkstd/string>
+#include <string>
 
 //#define DEBUG_MESH_GEOMETRY 1
 
@@ -42,6 +42,7 @@ public:
 	int load_msh_file(char* file_name);
 	int load_node_ele_files(char* node_file_name, char* ele_file_name);
 	int load_gmv_file(char* file_name);
+	int load_ani3d_out_file(char* ani3d_out_file_name);
 
 	bool point_in_tetr(int base_node_index, float dx, float dy, float dz, Tetrahedron* tetr, bool debug);
 	bool point_in_tetr(int base_node_index, float dx, float dy, float dz, Tetrahedron* tetr);
