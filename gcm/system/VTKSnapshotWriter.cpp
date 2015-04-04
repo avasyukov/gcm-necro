@@ -193,7 +193,7 @@ int VTKSnapshotWriter::dump_vtk (string filename, TetrMesh_1stOrder* tetr_mesh, 
 
 	*logger << "Dumping VTK snapshot to file " < filename;
 
-	xgw->SetInputData(g);
+	xgw->SetInput(g);
 	xgw->SetFileName(filename.c_str());
 	xgw->Update();
 

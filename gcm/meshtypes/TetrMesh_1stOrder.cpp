@@ -477,6 +477,7 @@ int TetrMesh_1stOrder::find_border_node_normal(int border_node_index, float* x, 
 	if( find_owner_tetr(&nodes[border_node_index], - min_h * final_normal[0], - min_h * final_normal[1], - min_h * final_normal[2]) == NULL )
 		throw GCMException( GCMException::MESH_EXCEPTION, "Can not create reasonable normal for node - is the border too sharp?");
 }
+
 // TODO move actual file and string operations into TaskPreparator or MshFileReader
 int TetrMesh_1stOrder::load_ani3d_out_file(char* ani3d_out_file_name)
 {
@@ -514,16 +515,18 @@ int TetrMesh_1stOrder::load_ani3d_out_file(char* ani3d_out_file_name)
 		new_node.setIsBorder (false);
 		new_node.addOwner (GCM);
 		new_node.setContactType (Free);
+		new_node.setUsed (true);
+		new_node.volume_calculator = NULL;
+		new_node.border_condition = NULL;
+		new_node.contact_condition = NULL;
+		for(int z = 0; z < 8; z++)
+			new_node.destruction_criterias[z] = 0;
 
 		new_node.local_num = i;
 		new_node.absolute_num = new_node.local_num;
+		new_node.local_zone_num = zone_num;
 		ani3d_out_infile >> new_node.coords[0] >> new_node.coords[1] >> new_node.coords[2];
 		new_node.setPlacement (Local);
-		new_node.setIsBorder (false);
-		new_node.addOwner (GCM);
-		new_node.setContactType (Free);
-		new_node.contact_data = NULL;
-		new_node.local_basis = NULL;
 
 		new_node.mesh = this;
 		nodes.push_back(new_node);
