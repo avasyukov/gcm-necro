@@ -1,8 +1,8 @@
-<task snap_num="30" step_per_snap="1">
+<task snap_num="1" step_per_snap="1">
 
 	<mesh>
 		<zones>
-			<zone num="0" file="cub6.out"/>
+			<zone num="0" file="cub6.out" type="ani3d"/>
 		</zones>
 	</mesh>
         <!--mesh>

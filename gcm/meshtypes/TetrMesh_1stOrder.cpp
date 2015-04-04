@@ -2406,8 +2406,8 @@ void TetrMesh_1stOrder::update_current_time(float time_step)
 };
 
 void TetrMesh_1stOrder::load_geometry_from_file(string file_name, map<string,string> params){
-	enum TYPES {CAS, ELE, GMV, MSH, VTU, OUT, UNKNOWN};
-	string types_str[] = {"cas", "ele", "gmv", "msh", "vtu", "out"};
+	enum TYPES {CAS, ELE, GMV, MSH, VTU, ANI3D, UNKNOWN};
+	string types_str[] = {"cas", "ele", "gmv", "msh", "vtu", "ani3d"};
 	string type = params.count("type") ? params["type"] : "msh";
 	int idx = UNKNOWN;
 	for (int i = 0; i < UNKNOWN; i++)
@@ -2427,7 +2427,7 @@ void TetrMesh_1stOrder::load_geometry_from_file(string file_name, map<string,str
 //			case GMV: ;
 			case MSH:
 			{
-				load_ani3d_out_file(const_cast<char*>(file_name.c_str()));
+				load_msh_file(const_cast<char*>(file_name.c_str()));
 				break;
 			}
 			case VTU:
@@ -2435,7 +2435,7 @@ void TetrMesh_1stOrder::load_geometry_from_file(string file_name, map<string,str
 				load_vtu_file(file_name);
 				break;
 			}
-			case OUT:
+			case ANI3D:
                         {
                                 load_ani3d_out_file(const_cast<char*>(file_name.c_str()));
                                 break;
