@@ -1,0 +1,97 @@
+<task snap_num="10" step_per_snap="1">
+        <mesh>
+                <zones>
+                        <zone num="0" file="./a3d/bones.out" type="ani3d"/>
+                </zones>
+        </mesh>
+        <mesh>
+                <zones>
+                        <zone num="1" file="./a3d/diapragm.out" type="ani3d"/>
+                </zones>
+        </mesh>
+        <mesh>
+                <zones>
+                        <zone num="2" file="./a3d/digestive.out" type="ani3d"/>
+                </zones>
+        </mesh>
+        <mesh>
+                <zones>
+                        <zone num="3" file="./a3d/fat.out" type="ani3d"/>
+                </zones>
+        </mesh>
+        <mesh>
+                <zones>
+                        <zone num="4" file="./a3d/heart.out" type="ani3d"/>
+                </zones>
+        </mesh>
+        <mesh>
+                <zones>
+                        <zone num="5" file="./a3d/liver.out" type="ani3d"/>
+                </zones>
+        </mesh>
+        <mesh>
+                <zones>
+                        <zone num="6" file="./a3d/lungs.out" type="ani3d"/>
+                </zones>
+        </mesh>
+        <mesh>
+                <zones>
+                        <zone num="7" file="./a3d/muscle.out" type="ani3d"/>
+                </zones>
+        </mesh>
+        <mesh>
+                <zones>
+                        <zone num="8" file="./a3d/trachea.out" type="ani3d"/>
+                </zones>
+        </mesh>
+        <mesh>
+                <zones>
+                        <zone num="9" file="./a3d/vessels.out" type="ani3d"/>
+                </zones>
+        </mesh>
+
+	<rheology la="99430000000" mu="78130000000" rho="0.0078" yield="10000000000000000">
+		<area type="mesh">0</area>
+	</rheology>
+        <rheology la="99430000000" mu="78130000000" rho="0.0078" yield="10000000000000000">
+                <area type="mesh">1</area>
+        </rheology> 
+        <rheology la="99430000000" mu="78130000000" rho="0.0078" yield="10000000000000000">
+                <area type="mesh">2</area>
+        </rheology>
+        <rheology la="99430000000" mu="78130000000" rho="0.0078" yield="10000000000000000">
+                <area type="mesh">3</area>
+        </rheology>
+        <rheology la="99430000000" mu="78130000000" rho="0.0078" yield="10000000000000000">
+                <area type="mesh">4</area>
+        </rheology>
+        <rheology la="99430000000" mu="78130000000" rho="0.0078" yield="10000000000000000">
+                <area type="mesh">5</area>
+        </rheology>
+        <rheology la="99430000000" mu="78130000000" rho="0.0078" yield="10000000000000000">
+                <area type="mesh">6</area>
+        </rheology>
+        <rheology la="99430000000" mu="78130000000" rho="0.0078" yield="10000000000000000">
+                <area type="mesh">7</area>
+        </rheology>
+        <rheology la="99430000000" mu="78130000000" rho="0.0078" yield="10000000000000000">
+                <area type="mesh">8</area>
+        </rheology>
+        <rheology la="99430000000" mu="78130000000" rho="0.0078" yield="10000000000000000">
+                <area type="mesh">9</area>
+        </rheology>
+
+        <stress>
+                <form type="step" begintime="0" duration="0.0001">
+                        amplitude 0 -3 0 -700 0 0 -900 0 -700
+                </form>
+                <area type="box">
+                        X 350 400
+                        Y 250 300
+                        Z 200 250
+                </area>
+                <perform type="uniform">
+                </perform>
+        </stress>
+
+</task>
